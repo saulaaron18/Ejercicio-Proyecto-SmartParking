@@ -71,12 +71,14 @@ public class SolicitudReserva {
 	//TO-DO alumno obligatorio
 	
 	public boolean esValida(GestorLocalidad gestorLocalidad) {
-		//TO-DO
-		return false;
+		return gestorLocalidad.existeZona(iZona, jZona) && tInicial.isBefore(tFinal) 
+				&& !vehiculo.getSancionado();
 	}
 	
 	public void gestionarSolicitudReserva(GestorLocalidad gestor) {
-		//TO-DO	
+		gestorZona = gestor.getGestorZona(iZona, jZona);
+		
+		hueco = gestorZona.reservarHueco(tInicial, tFinal);
 	}
 
 }

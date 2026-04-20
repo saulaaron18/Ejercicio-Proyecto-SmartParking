@@ -58,19 +58,19 @@ public class GestorZona {
 	//TO-DO alumno obligatorios
 
 	public GestorZona(int i, int j, int noPlazas, double precio) {
-	    this.iZona = i;
-	    this.jZona = j;
-	    this.precio = precio;
+		this.iZona = i;
+		this.jZona = j;
+		this.precio = precio;
 
-	    this.plazas = new Plaza[noPlazas];
-	    
-	    for (int k = 0; k < noPlazas; k++) {
-	        this.plazas[k] = new Plaza(k);
-	    }
-	    
-	    this.huecosReservados = new ArrayList<Hueco>();
-	    this.listaEspera = new ArrayList<SolicitudReservaAnticipada>();
-	    this.gestorHuecos = new GestorHuecos(this.plazas);
+		this.plazas = new Plaza[noPlazas];
+
+		for (int k = 0; k < noPlazas; k++) {
+			this.plazas[k] = new Plaza(k);
+		}
+
+		this.huecosReservados = new ArrayList<Hueco>();
+		this.listaEspera = new ArrayList<SolicitudReservaAnticipada>();
+		this.gestorHuecos = new GestorHuecos(this.plazas);
 	}
 
 	public Hueco reservarHueco(LocalDateTime tI, LocalDateTime tF) {
@@ -88,9 +88,14 @@ public class GestorZona {
 
 
 	public void meterEnListaEspera(SolicitudReservaAnticipada solicitud) {
-		if(solicitud != null) {
-			listaEspera.add(listaEspera.size(), solicitud);
-		}
+		int ordinalPrioridadSolicitud = solicitud.getPrioridad().ordinal();
+		int i=0;
+	    while (i < listaEspera.size() &&
+	           listaEspera.get(i).getPrioridad().ordinal() >= ordinalPrioridadSolicitud) {
+	    	i++;
+	    }
+	    
+	    listaEspera.add(i, solicitud);
 	}
 
 	public boolean existeHuecoReservado(Hueco hueco) {
@@ -111,12 +116,16 @@ public class GestorZona {
 
 	//PRE (no es necesario comprobar): las solicitudes de la lista de espera son válidas
 	public IList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera() {
-		IList<SolicitudReservaAnticipada> solicitudesAtendidasListaEspera;
-
-		for(int i=0;i<listaEspera.size();i++) {
-			if(listaEspera.get(i) == null);//Falta por hacer la clase)
+		ArrayList<SolicitudReservaAnticipada> solicitudesAtendidas = new ArrayList<SolicitudReservaAnticipada>();
+		
+		for(int i=0; i<listaEspera.size();i++) {
+			if(reservarHueco(listaEspera.get(i).getTInicial(), listaEspera.get(i).getTFinal()) != null) {
+				solicitudesAtendidas.add(solicitudesAtendidas.size(), listaEspera.get(i));
+				listaEspera.removeElementAt(i);
+			}
 		}
-		return null;
+		
+		return solicitudesAtendidas;
 	}
 
 

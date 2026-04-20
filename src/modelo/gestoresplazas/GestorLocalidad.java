@@ -38,14 +38,18 @@ public class GestorLocalidad {
 	}
 
 	public GestorZona getGestorZona(int i, int j) {
-		return gestoresZonas[i][j];
+		if(existeZona(i, j)) {
+			return gestoresZonas[i][j];
+		}
+		else {
+			return null;
+		}
 	}
 	
 	//TO-DO alumno opcional
 	
 	public IList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera(int i, int j) {
-		//TO-DO
-		return null;
+		return getGestorZona(i, j).getSolicitudesAtendidasListaEspera();
 	}
 	
 }
