@@ -35,41 +35,60 @@ public class ControladorReservas {
 	//TO-DO alumno obligatorio
 
 	public ControladorReservas(int[][] plazas, double[][] precios) {
-		//TO-DO
+		registroReservas = new Reservas();
+		gestorLocalidad = new GestorLocalidad(plazas, precios);
 	}
 
 
 	//PRE: la solicitud es válida
 	public int hacerReserva(SolicitudReserva solicitud) throws SolicitudReservaInvalida {
-		//TO-DO
-		return -1;
+		if(!solicitud.esValida(gestorLocalidad)){
+			throw new SolicitudReservaInvalida(
+				"Reserva inválida.");
+		}
+		solicitud.gestionarSolicitudReserva(gestorLocalidad);
+		return solicitud.getHueco() != null ?
+			registroReservas.registrarReserva(solicitud) : -1;
 	}
 
 	public Reserva getReserva(int numReserva) {
-		//TO-DO
-		return null;
+		return registroReservas.obtenerReserva(numReserva);
 	}
 
 	//PRE: la plaza dada está libre y la reserva está validada
 	public void ocuparPlaza(int i, int j, int numPlaza, int numReserva, Vehiculo vehiculo) throws PlazaOcupada, ReservaInvalida {
-		//TO-DO
+		Reserva reserva = registroReservas.obtenerReserva(numReserva);
+		reserva.validar(i, j, numPlaza, vehiculo.getMatricula(), gestorLocalidad);
+		if(reserva.getEstadoValidez() != EstadoValidez.OK){
+			throw new ReservaInvalida(
+				"Reserva inválida.");
+		} else if(reserva.getHueco().getPlaza().getVehiculo() != null){
+			throw new PlazaOcupada(
+				"Plaza ocupada.");
+		}
+		reserva.getHueco().getPlaza().setVehiculo(vehiculo);
 	}
 
 
 	//TO-DO alumno opcional
 
 	public void desocuparPlaza(int numReserva) {
-		//TO-DO
+		Reserva reserva = registroReservas.obtenerReserva(numReserva);
+		reserva.getHueco().getPlaza().setVehiculo(null);
+		reserva.liberarHuecoReservado();
 	}
 
 	public void anularReserva(int numReserva) {
-		//TO-DO
+		Reserva reserva = registroReservas.obtenerReserva(numReserva);
+		reserva.liberarHuecoReservado();
+		registroReservas.borrarReserva(numReserva);
 	}
 
 		
 	// PRE (no es necesario comprobar): todas las solicitudes atendidas son válidas.
 	public IList<Integer> getReservasRegistradasDesdeListaEspera(int i, int j){
-		//TO-DO
+		gestorLocalidad.getSolicitudesAtendidasListaEspera(i, j);
+		//TERMINAR
 		return null;
 	}
 }
