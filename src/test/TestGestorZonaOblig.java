@@ -33,6 +33,7 @@ public class TestGestorZonaOblig {
 	/**
 	 * Comprueba el constructor de GestorZona
 	 */
+	
 	@Test
 	public void testConst() {		
 
@@ -46,7 +47,7 @@ public class TestGestorZonaOblig {
 				+ "(00:00, 03:00, (1-null)),\n"
 				+ "(00:00, 03:00, (2-null))]]", gestor.getEstadoHuecosLibres());		
 	}
-
+	
 	/**
 	 * Comprueba el método reservarHueco() para el caso de que haya
 	 * un hueco disponible en el intervalo solicitado
@@ -168,5 +169,4 @@ public class TestGestorZonaOblig {
 
         assertTrue("Para la misma prioridad la solicitud llegada primero debe aparecer antes", idx1 >= 0 && idx2 >= 0 && idx1 < idx2);
 	}
-
 }

@@ -7,42 +7,49 @@ import modelo.reservas.solicitudesreservas.SolicitudReservaAnticipada;
 //TO-DO alumno obligatorio
 
 public class GestorLocalidad {
-	//TO-DO falta atributo
+	private GestorZona[][] gestoresZonas;
 
 	public GestorLocalidad(int[][] plazas, double[][] precios) {
-		//TO-DO
+		this.gestoresZonas = new GestorZona[plazas.length][plazas[0].length];
+		
+		for(int i=0;i<plazas.length;i++) {
+			for(int j=0;j<plazas[i].length;j++) {
+				gestoresZonas[i][j] = new GestorZona(i, j, plazas[i][j], precios[i][j]);
+			}
+		}
 	}
 	
 	public int getRadioMaxI() {
-		//TO-DO
-		return - 1;
+		return gestoresZonas.length - 1;
 	}
 	
 	public int getRadioMaxJ() {
-		//TO-DO
-		return - 1;
+		return gestoresZonas[0].length - 1;
 	}
 	
 	public boolean existeZona(int i, int j) {
-		//TO-DO
-		return false;
+		return i>=0 && j>=0 &&
+				i<=getRadioMaxI() &&
+				j<=getRadioMaxJ();
 	}
 
 	public boolean existeHuecoReservado(Hueco hueco, int i, int j) {
-		//TO-DO
-		return false;
+		return gestoresZonas[i][j].existeHuecoReservado(hueco);
 	}
 
 	public GestorZona getGestorZona(int i, int j) {
-		//TO-DO
-		return null;
+		if(existeZona(i, j)) {
+			return gestoresZonas[i][j];
+		}
+		else {
+			return null;
+		}
 	}
 	
 	//TO-DO alumno opcional
 	
 	public IList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera(int i, int j) {
-		//TO-DO
-		return null;
+		return getGestorZona(i, j).getSolicitudesAtendidasListaEspera();
 	}
 	
 }
