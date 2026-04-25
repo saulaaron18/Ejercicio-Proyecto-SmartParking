@@ -119,9 +119,13 @@ public class GestorZona {
 		ArrayList<SolicitudReservaAnticipada> solicitudesAtendidas = new ArrayList<SolicitudReservaAnticipada>();
 		
 		for(int i=0; i<listaEspera.size();i++) {
-			if(reservarHueco(listaEspera.get(i).getTInicial(), listaEspera.get(i).getTFinal()) != null) {
-				solicitudesAtendidas.add(solicitudesAtendidas.size(), listaEspera.get(i));
-				listaEspera.removeElementAt(i);
+			SolicitudReservaAnticipada solicitud = listaEspera.get(i);
+			Hueco hueco = reservarHueco(solicitud.getTInicial(), solicitud.getTFinal());
+			
+			if(hueco != null) {
+				solicitud.setHueco(hueco);
+				solicitudesAtendidas.add(solicitudesAtendidas.size(), solicitud);
+				listaEspera.remove(solicitud);
 			}
 		}
 		

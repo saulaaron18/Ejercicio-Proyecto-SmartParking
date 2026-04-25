@@ -3,12 +3,15 @@ package controladores;
 import controladores.excepciones.PlazaOcupada;
 import controladores.excepciones.ReservaInvalida;
 import controladores.excepciones.SolicitudReservaInvalida;
+import list.ArrayList;
 import list.IList;
 import modelo.gestoresplazas.GestorLocalidad;
+import modelo.gestoresplazas.huecos.Plaza;
 import modelo.reservas.EstadoValidez;
 import modelo.reservas.Reserva;
 import modelo.reservas.Reservas;
 import modelo.reservas.solicitudesreservas.SolicitudReserva;
+import modelo.reservas.solicitudesreservas.SolicitudReservaAnticipada;
 import modelo.vehiculos.Vehiculo;
 
 
@@ -57,23 +60,22 @@ public class ControladorReservas {
 
 	//PRE: la plaza dada está libre y la reserva está validada
 	public void ocuparPlaza(int i, int j, int numPlaza, int numReserva, Vehiculo vehiculo) throws PlazaOcupada, ReservaInvalida {
-		Reserva reserva = registroReservas.obtenerReserva(numReserva);
-		reserva.validar(i, j, numPlaza, vehiculo.getMatricula(), gestorLocalidad);
-		if(reserva.getEstadoValidez() != EstadoValidez.OK){
+		Plaza plaza = registroReservas.obtenerReserva(numReserva).getHueco().getPlaza();
+		if(!esValidaReserva(i, j, numPlaza, numReserva, vehiculo.getMatricula())){
 			throw new ReservaInvalida(
 				"Reserva inválida.");
-		} else if(reserva.getHueco().getPlaza().getVehiculo() != null){
+		} else if(plaza.getVehiculo() != null){
 			throw new PlazaOcupada(
 				"Plaza ocupada.");
 		}
-		reserva.getHueco().getPlaza().setVehiculo(vehiculo);
+		plaza.setVehiculo(vehiculo);
 	}
 
 
 	//TO-DO alumno opcional
 
 	public void desocuparPlaza(int numReserva) {
-		Reserva reserva = registroReservas.obtenerReserva(numReserva);
+		Reserva reserva = getReserva(numReserva);	
 		reserva.getHueco().getPlaza().setVehiculo(null);
 		reserva.liberarHuecoReservado();
 	}
@@ -86,9 +88,16 @@ public class ControladorReservas {
 
 		
 	// PRE (no es necesario comprobar): todas las solicitudes atendidas son válidas.
-	public IList<Integer> getReservasRegistradasDesdeListaEspera(int i, int j){
-		gestorLocalidad.getSolicitudesAtendidasListaEspera(i, j);
-		//TERMINAR
-		return null;
+	public IList<Integer> getReservasRegistradasDesdeListaEspera(int i, int j) {
+		IList<Integer> solicitudesRegistradas = new ArrayList<Integer>();
+		IList<SolicitudReservaAnticipada> solicitudesAtendidas = 
+				gestorLocalidad.getSolicitudesAtendidasListaEspera(i, j);
+		
+		for(int k=0;k<solicitudesAtendidas.size();k++) {
+			solicitudesRegistradas.add(solicitudesRegistradas.size(),
+					registroReservas.registrarReserva(solicitudesAtendidas.get(k)));
+		}
+		
+		return solicitudesRegistradas;
 	}
 }
