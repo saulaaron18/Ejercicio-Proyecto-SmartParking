@@ -12,15 +12,15 @@ public class SolicitudReservaAnticipada extends SolicitudReserva{
 		super(i, j, tI, tF, vehiculo);
 		this.prioridad = prioridad;
 	}
-	
+
 	public TEnumPrioridad getPrioridad() {
 		return prioridad;
 	}
-	
+
 	@Override
 	public void gestionarSolicitudReserva(GestorLocalidad gestor) {
 		super.gestionarSolicitudReserva(gestor);
-		
+
 		if(getHueco() == null) {
 			gestor.getGestorZona(getIZona(), getJZona()).meterEnListaEspera(this);
 		}

@@ -31,7 +31,7 @@ public class SolicitudReserva {
 		return "(Sol:" + iZona + " " + jZona + " " + tInicial.toLocalTime() + " " + tFinal.toLocalTime() 
 		+ " " + this.vehiculo.getMatricula() +  ")";
 	}
-	
+
 	public void setHueco(Hueco hueco) {
 		this.hueco = hueco;		
 	}
@@ -39,15 +39,15 @@ public class SolicitudReserva {
 	public Hueco getHueco() {
 		return hueco;
 	}
-	
+
 	public void setGestorZona(GestorZona gestor) {
 		this.gestorZona = gestor;		
 	}
-	
+
 	public GestorZona getGestorZona() {
 		return this.gestorZona;
 	}
-	
+
 	public int getIZona() {
 		return iZona;
 	}
@@ -67,17 +67,17 @@ public class SolicitudReserva {
 	public Vehiculo getVehiculo() {
 		return vehiculo;
 	}
-	
+
 	//TO-DO alumno obligatorio
-	
+
 	public boolean esValida(GestorLocalidad gestorLocalidad) {
 		return gestorLocalidad.existeZona(iZona, jZona) && tInicial.isBefore(tFinal) 
 				&& !vehiculo.getSancionado();
 	}
-	
+
 	public void gestionarSolicitudReserva(GestorLocalidad gestor) {
 		gestorZona = gestor.getGestorZona(iZona, jZona);
-		
+
 		hueco = gestorZona.reservarHueco(tInicial, tFinal);
 	}
 

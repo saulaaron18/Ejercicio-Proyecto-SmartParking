@@ -90,12 +90,12 @@ public class GestorZona {
 	public void meterEnListaEspera(SolicitudReservaAnticipada solicitud) {
 		int ordinalPrioridadSolicitud = solicitud.getPrioridad().ordinal();
 		int i=0;
-	    while (i < listaEspera.size() &&
-	           listaEspera.get(i).getPrioridad().ordinal() >= ordinalPrioridadSolicitud) {
-	    	i++;
-	    }
-	    
-	    listaEspera.add(i, solicitud);
+		while (i < listaEspera.size() &&
+				listaEspera.get(i).getPrioridad().ordinal() >= ordinalPrioridadSolicitud) {
+			i++;
+		}
+
+		listaEspera.add(i, solicitud);
 	}
 
 	public boolean existeHuecoReservado(Hueco hueco) {
@@ -117,18 +117,19 @@ public class GestorZona {
 	//PRE (no es necesario comprobar): las solicitudes de la lista de espera son válidas
 	public IList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera() {
 		ArrayList<SolicitudReservaAnticipada> solicitudesAtendidas = new ArrayList<SolicitudReservaAnticipada>();
-		
+
 		for(int i=0; i<listaEspera.size();i++) {
 			SolicitudReservaAnticipada solicitud = listaEspera.get(i);
 			Hueco hueco = reservarHueco(solicitud.getTInicial(), solicitud.getTFinal());
-			
+
 			if(hueco != null) {
 				solicitud.setHueco(hueco);
 				solicitudesAtendidas.add(solicitudesAtendidas.size(), solicitud);
-				listaEspera.remove(solicitud);
+				listaEspera.removeElementAt(i);
+				i--;
 			}
 		}
-		
+
 		return solicitudesAtendidas;
 	}
 

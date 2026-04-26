@@ -47,11 +47,11 @@ public class ControladorReservas {
 	public int hacerReserva(SolicitudReserva solicitud) throws SolicitudReservaInvalida {
 		if(!solicitud.esValida(gestorLocalidad)){
 			throw new SolicitudReservaInvalida(
-				"Reserva inválida.");
+					"Reserva inválida.");
 		}
 		solicitud.gestionarSolicitudReserva(gestorLocalidad);
-		return solicitud.getHueco() != null ?
-			registroReservas.registrarReserva(solicitud) : -1;
+		return (solicitud.getHueco() != null) ?
+				registroReservas.registrarReserva(solicitud) : -1;
 	}
 
 	public Reserva getReserva(int numReserva) {
@@ -63,10 +63,10 @@ public class ControladorReservas {
 		Plaza plaza = registroReservas.obtenerReserva(numReserva).getHueco().getPlaza();
 		if(!esValidaReserva(i, j, numPlaza, numReserva, vehiculo.getMatricula())){
 			throw new ReservaInvalida(
-				"Reserva inválida.");
+					"Reserva inválida.");
 		} else if(plaza.getVehiculo() != null){
 			throw new PlazaOcupada(
-				"Plaza ocupada.");
+					"Plaza ocupada.");
 		}
 		plaza.setVehiculo(vehiculo);
 	}
@@ -86,18 +86,18 @@ public class ControladorReservas {
 		registroReservas.borrarReserva(numReserva);
 	}
 
-		
+
 	// PRE (no es necesario comprobar): todas las solicitudes atendidas son válidas.
 	public IList<Integer> getReservasRegistradasDesdeListaEspera(int i, int j) {
 		IList<Integer> solicitudesRegistradas = new ArrayList<Integer>();
 		IList<SolicitudReservaAnticipada> solicitudesAtendidas = 
 				gestorLocalidad.getSolicitudesAtendidasListaEspera(i, j);
-		
+
 		for(int k=0;k<solicitudesAtendidas.size();k++) {
 			solicitudesRegistradas.add(solicitudesRegistradas.size(),
 					registroReservas.registrarReserva(solicitudesAtendidas.get(k)));
 		}
-		
+
 		return solicitudesRegistradas;
 	}
 }
