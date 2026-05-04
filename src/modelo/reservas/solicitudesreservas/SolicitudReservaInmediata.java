@@ -16,17 +16,11 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 	}
 	
 	public boolean esValida(GestorLocalidad gestorLocalidad) {
-		return super.esValida(gestorLocalidad) && radio > 0 && existeZonaEnRadio(gestorLocalidad);
+		//TODO
 	}
 	
 	public void gestionarSolicitudReserva(GestorLocalidad gestor) {
 		//TODO
-	}
-	
-	private boolean existeZonaEnRadio(GestorLocalidad gestorLocalidad) {
-		for(int k = 0; k < 4 * radio; k++) {
-			
-		}
 	}
 
 }
