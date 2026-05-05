@@ -21,16 +21,11 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 		boolean esValido = super.esValida(gestorLocalidad) && radio>0;
 		boolean encontrado = !esValido;
 
-		//r = |di|+|dj| --> |di| = r - |dj|
-		//de -r a r, es decir O(2r+1) <-> O(2r)
 		for (int di = -radio; di <= radio && !encontrado; di++) {
 			int djAbs = radio - Math.abs(di);
 
-			if (gestorLocalidad.existeZona(getIZona() + di, getJZona() + djAbs)) {
-				encontrado = true;
-			}
-			if (!encontrado && djAbs != 0 && 
-					gestorLocalidad.existeZona(getIZona() + di, getJZona() - djAbs)) {
+			if ((gestorLocalidad.existeZona(getIZona() + di, getJZona() + djAbs)) || 
+					(djAbs != 0 && gestorLocalidad.existeZona(getIZona() + di, getJZona() - djAbs))) {
 				encontrado = true;
 			}
 		}
@@ -49,12 +44,12 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 			for (int i = 0; i < candidatos.size() && getHueco() == null; i++) {
 				GestorZona candidata = candidatos.get(i);
 				Hueco hueco = candidata.reservarHueco(getTInicial(), getTFinal());
-				
+
 				if (hueco != null) {
 					setHueco(hueco);
 					setGestorZona(candidata);
 				}
-			}//Fin for()
+			}
 		}
 	}
 
@@ -85,14 +80,15 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 	private void anadirSiExiste(ArrayList<GestorZona> candidatos, GestorLocalidad gestor, int i, int j) {
 		GestorZona gestorZona = gestor.getGestorZona(i, j);
 		if (gestorZona != null) {
-			
-		    int pos = 0;
-		    while (pos < candidatos.size() &&
-		           candidatos.get(pos).getPrecio() <= gestorZona.getPrecio()) {
-		        pos++;
-		    }
-		    
-		    candidatos.add(pos, gestorZona);
+
+			int pos = 0;
+			double precioGestorZona = gestorZona.getPrecio();
+			while (pos < candidatos.size() &&
+					candidatos.get(pos).getPrecio() <= precioGestorZona) {
+				pos++;
+			}
+
+			candidatos.add(pos, gestorZona);
 		}
 	}
 }
