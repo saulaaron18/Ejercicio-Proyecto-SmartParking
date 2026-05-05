@@ -89,7 +89,7 @@ public class ControladorReservas {
 
 	// PRE (no es necesario comprobar): todas las solicitudes atendidas son válidas.
 	public IList<Integer> getReservasRegistradasDesdeListaEspera(int i, int j) {
-		IList<Integer> solicitudesRegistradas = new ArrayList<Integer>();
+		IList<Integer> solicitudesRegistradas = new ArrayList<>();
 		IList<SolicitudReservaAnticipada> solicitudesAtendidas = 
 				gestorLocalidad.getSolicitudesAtendidasListaEspera(i, j);
 

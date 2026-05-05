@@ -68,8 +68,8 @@ public class GestorZona {
 			this.plazas[k] = new Plaza(k);
 		}
 
-		this.huecosReservados = new ArrayList<Hueco>();
-		this.listaEspera = new ArrayList<SolicitudReservaAnticipada>();
+		this.huecosReservados = new ArrayList<>();
+		this.listaEspera = new ArrayList<>();
 		this.gestorHuecos = new GestorHuecos(this.plazas);
 	}
 
@@ -116,7 +116,7 @@ public class GestorZona {
 
 	//PRE (no es necesario comprobar): las solicitudes de la lista de espera son válidas
 	public IList<SolicitudReservaAnticipada> getSolicitudesAtendidasListaEspera() {
-		ArrayList<SolicitudReservaAnticipada> solicitudesAtendidas = new ArrayList<SolicitudReservaAnticipada>();
+		ArrayList<SolicitudReservaAnticipada> solicitudesAtendidas = new ArrayList<>();
 
 		for(int i=0; i<listaEspera.size();i++) {
 			SolicitudReservaAnticipada solicitud = listaEspera.get(i);
@@ -126,7 +126,6 @@ public class GestorZona {
 				solicitud.setHueco(hueco);
 				solicitudesAtendidas.add(solicitudesAtendidas.size(), solicitud);
 				listaEspera.removeElementAt(i);
-				i--;
 			}
 		}
 

@@ -42,7 +42,7 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 		super.gestionarSolicitudReserva(gestor);
 		if (getHueco() == null) {
 
-			ArrayList<GestorZona> candidatos = new ArrayList<GestorZona>();
+			ArrayList<GestorZona> candidatos = new ArrayList<>();
 			recolectarCandidatosEnOrdenHorario(candidatos, gestor);
 
 			while (getHueco() == null && candidatos.size() > 0) {
@@ -70,7 +70,8 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 
 	private void recolectarCandidatosEnOrdenHorario(ArrayList<GestorZona> candidatos,
 			GestorLocalidad gestor) {
-		int i = getIZona(), j = getJZona();
+		int i = getIZona();
+		int j = getJZona();
 
 		for (int d = 1; d <= radio; d++) {
 
