@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import modelo.gestoresplazas.GestorLocalidad;
 import modelo.gestoresplazas.GestorZona;
+import modelo.gestoresplazas.huecos.Hueco;
 import modelo.vehiculos.Vehiculo;
 import list.ArrayList;
 
@@ -45,27 +46,16 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 			ArrayList<GestorZona> candidatos = new ArrayList<>();
 			recolectarCandidatosEnOrdenHorario(candidatos, gestor);
 
-			while (getHueco() == null && candidatos.size() > 0) {
-				int idxMejor = indiceZonaMasBarata(candidatos);
-				GestorZona mejorGestorZona = candidatos.get(idxMejor);
-				candidatos.removeElementAt(idxMejor);
-
-				setGestorZona(mejorGestorZona);
-				//Intentamos reservar el hueco (puede ser null)
-				setHueco(mejorGestorZona.reservarHueco(getTInicial(), getTFinal()));
-			}
+			for (int i = 0; i < candidatos.size() && getHueco() == null; i++) {
+				GestorZona candidata = candidatos.get(i);
+				Hueco hueco = candidata.reservarHueco(getTInicial(), getTFinal());
+				
+				if (hueco != null) {
+					setHueco(hueco);
+					setGestorZona(candidata);
+				}
+			}//Fin for()
 		}
-	}
-
-	private int indiceZonaMasBarata(ArrayList<GestorZona> candidatos) {
-		int idx = 0;
-		for (int i = 1; i < candidatos.size(); i++) {
-			if (candidatos.get(i).getPrecio() < candidatos.get(idx).getPrecio()) {
-				idx = i;
-			}
-			//En caso de empate, el primero
-		}
-		return idx;
 	}
 
 	private void recolectarCandidatosEnOrdenHorario(ArrayList<GestorZona> candidatos,
@@ -95,7 +85,14 @@ public class SolicitudReservaInmediata extends SolicitudReserva {
 	private void anadirSiExiste(ArrayList<GestorZona> candidatos, GestorLocalidad gestor, int i, int j) {
 		GestorZona gestorZona = gestor.getGestorZona(i, j);
 		if (gestorZona != null) {
-			candidatos.add(candidatos.size(), gestorZona);
+			
+		    int pos = 0;
+		    while (pos < candidatos.size() &&
+		           candidatos.get(pos).getPrecio() <= gestorZona.getPrecio()) {
+		        pos++;
+		    }
+		    
+		    candidatos.add(pos, gestorZona);
 		}
 	}
 }
